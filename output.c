@@ -58,19 +58,62 @@ int _printf(const char *format, ...)
                     count += _putchar(buffer[--i]);
                 }
             }
-            else if (*format == 'b')
+            else if (*format == 'u')
             {
                 unsigned int num = va_arg(args, unsigned int);
-                int binary[32];
+                char buffer[20];
                 int i = 0;
-                while (num > 0)
+                if (num == 0)
                 {
-                    binary[i++] = num % 2;
-                    num /= 2;
+                    count += _putchar('0');
+                }
+                while (num != 0)
+                {
+                    buffer[i++] = (num % 10) + '0';
+                    num /= 10;
                 }
                 while (i > 0)
                 {
-                    count += _putchar(binary[--i] + '0');
+                    count += _putchar(buffer[--i]);
+                }
+            }
+            else if (*format == 'o')
+            {
+                unsigned int num = va_arg(args, unsigned int);
+                char buffer[20];
+                int i = 0;
+                if (num == 0)
+                {
+                    count += _putchar('0');
+                }
+                while (num != 0)
+                {
+                    buffer[i++] = (num % 8) + '0';
+                    num /= 8;
+                }
+                while (i > 0)
+                {
+                    count += _putchar(buffer[--i]);
+                }
+            }
+            else if (*format == 'x' || *format == 'X')
+            {
+                unsigned int num = va_arg(args, unsigned int);
+                char buffer[20];
+                int i = 0;
+                char *format_str = (*format == 'x') ? "%x" : "%X";
+                if (num == 0)
+                {
+                    count += _putchar('0');
+                }
+                while (num != 0)
+                {
+                    buffer[i++] = (num % 16 < 10) ? (num % 16 + '0') : (num % 16 - 10 + 'a');
+                    num /= 16;
+                }
+                while (i > 0)
+                {
+                    count += _printf(format_str, buffer[--i]);
                 }
             }
             else if (*format == '%')
