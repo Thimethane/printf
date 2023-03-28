@@ -1,54 +1,86 @@
 #include "main.h"
-#include <stdio.h>
 #include <stdarg.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
 
 /**
- * _printf - prints output to stdout according to a given format
- * @format: format string
+ * _putchar - writes the character c to stdout
+ * @c: The character to print
  *
- * Return: number of characters printed (excluding the null byte)
+ * Return: On success 1.
+ * On error, -1 is returned, and errno is set appropriately.
+ */
+int _putchar(char c)
+{
+	return (write(1, &c, 1));
+}
+
+/**
+ * _printf - prints output according to a format
+	@@ -11,62 +25,64 @@
  */
 int _printf(const char *format, ...)
 {
-    va_list args;
-    int count = 0;
-    const char *p = format;
+	va_list args;
+	int count = 0;
 
-    va_start(args, format);
-    while (*p != '\0')
-    {
-        if (*p == '%')
-        {
-            p++;
-            switch (*p)
-            {
-                case 'c':
-                {
-                    int value = va_arg(args, int);
-                    count += write(1,(const void*)&value, sizeof(int));
-                    break;
-                }
-                case 's':
-                {
-                    char *str = va_arg(args, char *);
-                    count += write(1, str, strlen(str));
-                    break;
-                }
-                case '%':
-                    count += write(1, "%", 1);
-                    break;
-            }
-        }
-        else
-        {
-            count += write(1, p, 1);
-        }
-        p++;
-    }
+	va_start(args, format);
 
-    va_end(args);
+	while (*format)
+	{
+		if (*format == '%')
+		{
+			format++;
 
-    return (count);
+			if (*format == 'c')
+			{
+				int c = va_arg(args, int);
+				count += _putchar(c);
+			}
+			else if (*format == 's')
+			{
+				char *s = va_arg(args, char *);
+				if (s == NULL)
+					s = "(null)";
+				while (*s)
+				{
+					count += _putchar(*s);
+					s++;
+				}
+			}
+			else if (*format == 'd' || *format == 'i')
+			{
+				int num = va_arg(args, int);
+				char buffer[12];
+				char *s = buffer;
+				sprintf(buffer, "%d", num);
+				while (*s)
+				{
+					count += _putchar(*s);
+					s++;
+				}
+			}
+			else if (*format == '%')
+			{
+				count += _putchar('%');
+			}
+			else
+			{
+				count += _putchar('%');
+				count += _putchar(*format);
+			}
+		}
+		else
+		{
+			count += _putchar(*format);
+		}
+
+		format++;
+	}
+
+	va_end(args);
+
+	return (count);
 }
