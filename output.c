@@ -1,9 +1,9 @@
 #include "main.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <stdarg.h>
-#include <stddef.h>
+#include <stdio.h>
 #include <unistd.h>
+#include <stddef.h>
+#include <stdlib.h>
 
 /**
  * _putchar - Writes a character to the standard output
@@ -15,7 +15,6 @@ int _putchar(char c)
 {
     return (write(1, &c, 1));
 }
-
 /**
  * _printf - prints output according to a format
  * @format: format string
@@ -35,91 +34,44 @@ int _printf(const char *format, ...)
         {
             format++;
 
-            if (*format == 'c')
-            {
-                int c = va_arg(args, int);
-                count += _putchar(c);
-            }
-            else if (*format == 's')
-            {
-                char *s = va_arg(args, char *);
-                if (s == NULL)
-                    s = "(null)";
-                while (*s)
-                {
-                    count += _putchar(*s);
-                    s++;
-                }
-            }
-            else if (*format == 'd' || *format == 'i')
+            if (*format == 'd' || *format == 'i')
             {
                 int num = va_arg(args, int);
-                char buffer[12];
-                char *s;
-                sprintf(buffer, "%d", num);
-                s = buffer;
-                while (*s)
+                char buffer[20];
+                int i = 0;
+                if (num == 0)
                 {
-                    count += _putchar(*s);
-                    s++;
+                    count += _putchar('0');
                 }
-            }
-            else if (*format == 'u')
-            {
-                unsigned int num = va_arg(args, unsigned int);
-                char buffer[12];
-                char *s;
-                sprintf(buffer, "%u", num);
-                s = buffer;
-                while (*s)
+                else if (num < 0)
                 {
-                    count += _putchar(*s);
-                    s++;
+                    count += _putchar('-');
+                    num = -num;
                 }
-            }
-            else if (*format == 'o')
-            {
-                unsigned int num = va_arg(args, unsigned int);
-                char buffer[12];
-                char *s;
-                sprintf(buffer, "%o", num);
-                s = buffer;
-                while (*s)
+                while (num != 0)
                 {
-                    count += _putchar(*s);
-                    s++;
+                    buffer[i++] = (num % 10) + '0';
+                    num /= 10;
                 }
-            }
-            else if (*format == 'x')
-            {
-                unsigned int num = va_arg(args, unsigned int);
-                char buffer[12];
-                char *s;
-                sprintf(buffer, "%x", num);
-                s = buffer;
-                while (*s)
+                while (i > 0)
                 {
-                    count += _putchar(*s);
-                    s++;
-                }
-            }
-            else if (*format == 'X')
-            {
-                unsigned int num = va_arg(args, unsigned int);
-                char buffer[12];
-                char *s;
-                sprintf(buffer, "%X", num);
-                s = buffer;
-                while (*s)
-                {
-                    count += _putchar(*s);
-                    s++;
+                    count += _putchar(buffer[--i]);
                 }
             }
             else if (*format == 'b')
             {
                 unsigned int num = va_arg(args, unsigned int);
-                count += print_binary(num);
+                int binary[32];
+                int i = 0;
+                while (num > 0)
+                {
+                    binary[i++] = num % 2;
+                    num /= 2;
+                }
+                while (i > 0)
+                {
+                    count += _putchar(binary[--i] + '0');
+                }
             }
             else if (*format == '%')
             {
@@ -141,5 +93,5 @@ int _printf(const char *format, ...)
 
     va_end(args);
 
-    return (count);
+    return count;
 }
