@@ -1,33 +1,25 @@
 #include "main.h"
 #include <stdarg.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <stddef.h>
 #include <stdlib.h>
 
 /**
- * print_unsigned - prints an unsigned integer
- * @n: the unsigned integer to print
- * @base: the base to print the number in
- * @digits: the digits to use for the base
+ * _putchar - Writes a character to the standard output
+ * @c: The character to write
  *
- * Return: the number of digits printed
+ * Return: 1 on success, -1 on failure
  */
-int print_unsigned(unsigned int n, int base, char *digits)
+int _putchar(char c)
 {
-    int count = 0;
-
-    if (n / base)
-        count += print_unsigned(n / base, base, digits);
-
-    count += putchar(digits[n % base]);
-
-    return (count);
+    return (write(1, &c, 1));
 }
-
 /**
  * _printf - prints output according to a format
- * @format: the format string
+ * @format: format string
  *
- * Return: the number of characters printed
+ * Return: number of characters printed (excluding the null byte)
  */
 int _printf(const char *format, ...)
 {
@@ -45,46 +37,98 @@ int _printf(const char *format, ...)
             if (*format == 'd' || *format == 'i')
             {
                 int num = va_arg(args, int);
-                if (num < 0)
+                char buffer[20];
+                int i = 0;
+                if (num == 0)
                 {
-                    count += putchar('-');
+                    count += _putchar('0');
+                }
+                else if (num < 0)
+                {
+                    count += _putchar('-');
                     num = -num;
                 }
-                count += print_unsigned(num, 10, "0123456789");
+                while (num != 0)
+                {
+                    buffer[i++] = (num % 10) + '0';
+                    num /= 10;
+                }
+                while (i > 0)
+                {
+                    count += _putchar(buffer[--i]);
+                }
             }
             else if (*format == 'u')
             {
                 unsigned int num = va_arg(args, unsigned int);
-                count += print_unsigned(num, 10, "0123456789");
+                char buffer[20];
+                int i = 0;
+                if (num == 0)
+                {
+                    count += _putchar('0');
+                }
+                while (num != 0)
+                {
+                    buffer[i++] = (num % 10) + '0';
+                    num /= 10;
+                }
+                while (i > 0)
+                {
+                    count += _putchar(buffer[--i]);
+                }
             }
             else if (*format == 'o')
             {
                 unsigned int num = va_arg(args, unsigned int);
-                count += print_unsigned(num, 8, "01234567");
+                char buffer[20];
+                int i = 0;
+                if (num == 0)
+                {
+                    count += _putchar('0');
+                }
+                while (num != 0)
+                {
+                    buffer[i++] = (num % 8) + '0';
+                    num /= 8;
+                }
+                while (i > 0)
+                {
+                    count += _putchar(buffer[--i]);
+                }
             }
-            else if (*format == 'x')
+            else if (*format == 'x' || *format == 'X')
             {
                 unsigned int num = va_arg(args, unsigned int);
-                count += print_unsigned(num, 16, "0123456789abcdef");
-            }
-            else if (*format == 'X')
-            {
-                unsigned int num = va_arg(args, unsigned int);
-                count += print_unsigned(num, 16, "0123456789ABCDEF");
+                char buffer[20];
+                int i = 0;
+                char *format_str = (*format == 'x') ? "%x" : "%X";
+                if (num == 0)
+                {
+                    count += _putchar('0');
+                }
+                while (num != 0)
+                {
+                    buffer[i++] = (num % 16 < 10) ? (num % 16 + '0') : (num % 16 - 10 + 'a');
+                    num /= 16;
+                }
+                while (i > 0)
+                {
+                    count += _printf(format_str, buffer[--i]);
+                }
             }
             else if (*format == '%')
             {
-                count += putchar('%');
+                count += _putchar('%');
             }
             else
             {
-                count += putchar('%');
-                count += putchar(*format);
+                count += _putchar('%');
+                count += _putchar(*format);
             }
         }
         else
         {
-            count += putchar(*format);
+            count += _putchar(*format);
         }
 
         format++;
@@ -92,5 +136,5 @@ int _printf(const char *format, ...)
 
     va_end(args);
 
-    return (count);
+    return count;
 }
