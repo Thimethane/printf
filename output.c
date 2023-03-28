@@ -1,6 +1,8 @@
 #include "main.h"
 #include <stdarg.h>
 #include <stddef.h>
+#include <stdlib.h> 
+
 /**
  * _printf - prints output according to a format
  * @format: format string
@@ -30,6 +32,16 @@ int _printf(const char *format, ...)
                 char *s = va_arg(args, char *);
                 if (s == NULL)
                     s = "(null)";
+                while (*s)
+                {
+                    count += _putchar(*s);
+                    s++;
+                }
+            }
+            else if (*format == 'd' || *format == 'i')
+            {
+                int num = va_arg(args, int);
+                char *s = itoa(num);
                 while (*s)
                 {
                     count += _putchar(*s);
