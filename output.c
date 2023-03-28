@@ -16,6 +16,12 @@ int _putchar(char c)
     return (write(1, &c, 1));
 }
 
+/**
+ * _printf - prints output according to a format
+ * @format: format string
+ *
+ * Return: number of characters printed (excluding the null byte)
+ */
 int _printf(const char *format, ...)
 {
     va_list args;
@@ -51,6 +57,58 @@ int _printf(const char *format, ...)
                 char buffer[12];
                 char *s;
                 sprintf(buffer, "%d", num);
+                s = buffer;
+                while (*s)
+                {
+                    count += _putchar(*s);
+                    s++;
+                }
+            }
+            else if (*format == 'u')
+            {
+                unsigned int num = va_arg(args, unsigned int);
+                char buffer[12];
+                char *s;
+                sprintf(buffer, "%u", num);
+                s = buffer;
+                while (*s)
+                {
+                    count += _putchar(*s);
+                    s++;
+                }
+            }
+            else if (*format == 'o')
+            {
+                unsigned int num = va_arg(args, unsigned int);
+                char buffer[12];
+                char *s;
+                sprintf(buffer, "%o", num);
+                s = buffer;
+                while (*s)
+                {
+                    count += _putchar(*s);
+                    s++;
+                }
+            }
+            else if (*format == 'x')
+            {
+                unsigned int num = va_arg(args, unsigned int);
+                char buffer[12];
+                char *s;
+                sprintf(buffer, "%x", num);
+                s = buffer;
+                while (*s)
+                {
+                    count += _putchar(*s);
+                    s++;
+                }
+            }
+            else if (*format == 'X')
+            {
+                unsigned int num = va_arg(args, unsigned int);
+                char buffer[12];
+                char *s;
+                sprintf(buffer, "%X", num);
                 s = buffer;
                 while (*s)
                 {
