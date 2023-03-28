@@ -27,7 +27,7 @@ int _printf(const char *format, ...)
                 case 'c':
                 {
                     int value = va_arg(args, int);
-                    count += write(1, &value, sizeof(int));
+                    count += write(1,(const void*)&value, sizeof(int));
                     break;
                 }
                 case 's':
