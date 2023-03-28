@@ -1,9 +1,6 @@
 #include "main.h"
-#include <stdarg.h>
-#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 /**
  * _putchar - Writes a character to the standard output
@@ -15,12 +12,7 @@ int _putchar(char c)
 {
     return (write(1, &c, 1));
 }
-/**
- * print_binary - prints a number in binary form
- * @n: the number to print
- *
- * Return: the number of digits printed
- */
+
 int print_binary(unsigned int n)
 {
     int count = 0;
@@ -33,12 +25,6 @@ int print_binary(unsigned int n)
     return (count);
 }
 
-/**
- * _printf - prints output according to a format
- * @format: format string
- *
- * Return: number of characters printed (excluding the null byte)
- */
 int _printf(const char *format, ...)
 {
     va_list args;
