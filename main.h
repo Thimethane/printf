@@ -1,5 +1,5 @@
 #ifndef MAIN_H
-#define MAI
+#define MAIN_H
 
 int _putchar(char c);
 int print_binary(unsigned int n);
