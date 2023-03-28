@@ -19,7 +19,9 @@ int _putchar(char c)
 
 /**
  * _printf - prints output according to a format
-	@@ -11,62 +25,64 @@
+ * @format: format string
+ *
+ * Return: number of characters printed (excluding the null byte)
  */
 int _printf(const char *format, ...)
 {
