@@ -1,9 +1,6 @@
 #include "main.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdarg.h>
-#include <stddef.h>
-#include <unistd.h>
 
 /**
  * _putchar - Writes a character to the standard output
@@ -14,18 +11,6 @@
 int _putchar(char c)
 {
     return (write(1, &c, 1));
-}
-
-int print_binary(unsigned int n)
-{
-    int count = 0;
-
-    if (n > 1)
-        count += print_binary(n >> 1);
-
-    count += _putchar((n & 1) + '0');
-
-    return (count);
 }
 
 int _printf(const char *format, ...)
@@ -61,8 +46,9 @@ int _printf(const char *format, ...)
             {
                 int num = va_arg(args, int);
                 char buffer[12];
+                char *s;
                 sprintf(buffer, "%d", num);
-                char *s = buffer;
+                s = buffer;
                 while (*s)
                 {
                     count += _putchar(*s);
