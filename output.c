@@ -1,12 +1,12 @@
 #include "main.h"
 #include <stdarg.h>
-#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 /**
  * _putchar - writes the character c to stdout
+ *
  * @c: The character to print
  *
  * Return: On success 1.
@@ -18,8 +18,68 @@ int _putchar(char c)
 }
 
 /**
+ * _print_char - prints a character
+ *
+ * @args: list of arguments
+ *
+ * Return: number of characters printed (excluding the null byte)
+ */
+int _print_char(va_list args)
+{
+	int count = 0;
+
+	count += _putchar(va_arg(args, int));
+	return (count);
+}
+
+/**
+ * _print_string - prints a string
+ *
+ * @args: list of arguments
+ *
+ * Return: number of characters printed (excluding the null byte)
+ */
+int _print_string(va_list args)
+{
+	int count = 0;
+	char *s = va_arg(args, char *);
+
+	if (s == NULL)
+		s = "(null)";
+	while (*s)
+	{
+		count += _putchar(*s);
+		s++;
+	}
+	return (count);
+}
+
+/**
+ * _print_number - prints a number
+ *
+ * @args: list of arguments
+ *
+ * Return: number of characters printed (excluding the null byte)
+ */
+int _print_number(va_list args)
+{
+	int count = 0, num = va_arg(args, int);
+	char buffer[12], *s = buffer;
+
+	sprintf(buffer, "%d", num);
+	while (*s)
+	{
+		count += _putchar(*s);
+		s++;
+	}
+	return (count);
+}
+
+/**
  * _printf - prints output according to a format
+ *
  * @format: format string
+ * @...: list of arguments
  *
  * Return: number of characters printed (excluding the null byte)
  */
@@ -35,39 +95,14 @@ int _printf(const char *format, ...)
 		if (*format == '%')
 		{
 			format++;
-
 			if (*format == 'c')
-			{
-				int c = va_arg(args, int);
-				count += _putchar(c);
-			}
+				count += _print_char(args);
 			else if (*format == 's')
-			{
-				char *s = va_arg(args, char *);
-				if (s == NULL)
-					s = "(null)";
-				while (*s)
-				{
-					count += _putchar(*s);
-					s++;
-				}
-			}
+				count += _print_string(args);
 			else if (*format == 'd' || *format == 'i')
-			{
-				int num = va_arg(args, int);
-				char buffer[12];
-				char *s = buffer;
-				sprintf(buffer, "%d", num);
-				while (*s)
-				{
-					count += _putchar(*s);
-					s++;
-				}
-			}
+				count += _print_number(args);
 			else if (*format == '%')
-			{
 				count += _putchar('%');
-			}
 			else
 			{
 				count += _putchar('%');
@@ -75,10 +110,7 @@ int _printf(const char *format, ...)
 			}
 		}
 		else
-		{
 			count += _putchar(*format);
-		}
-
 		format++;
 	}
 
